@@ -20,6 +20,11 @@ export default function Page() {
       >
         <Chat />
       </Suspense>
+
+      <div className="px-4 py-6 text-center text-sm text-muted-foreground">
+        If he behaves badly or writes nonsense dm me on discord (pnguins).
+        Thank youuuu
+      </div>
     </div>
   );
 }

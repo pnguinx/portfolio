@@ -8,30 +8,15 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import {
   ArrowUp,
-  BriefcaseBusiness,
   Code,
   Coffee,
-  Laugh,
-  Layers,
-  UserRoundSearch,
+  Snowflake,
+  Sparkles,
+  Brain,
 } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-
-const questions = {
-  Me: "Who are you? I want to know more about you.",
-  Projects: "What are your projects? What are you working on right now?",
-  Skills: "What are your skills? Give me a list of your soft and hard skills.",
-  Contact: "How can I contact you?",
-} as const;
-
-const questionConfig = [
-  { key: "Me", color: "#329696", icon: Laugh },
-  { key: "Projects", color: "#3E9858", icon: BriefcaseBusiness },
-  { key: "Skills", color: "#856ED9", icon: Layers },
-  { key: "Contact", color: "#C19433", icon: UserRoundSearch },
-] as const;
 
 export default function Home() {
   const [input, setInput] = useState("");
@@ -43,7 +28,7 @@ export default function Home() {
 
   const goToChat = (query: string) =>
     router.push(
-      `/chat?query=${encodeURIComponent(query)}&style=${selectedStyle}`
+      `/chat?query=${encodeURIComponent(query)}&style=${selectedStyle}`,
     );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -58,7 +43,7 @@ export default function Home() {
   };
 
   const handleStyleChange = (
-    style: "polite" | "concise" | "versatile" | "creative"
+    style: "polite" | "concise" | "versatile" | "creative",
   ) => {
     setSelectedStyle(style);
   };
@@ -150,7 +135,7 @@ export default function Home() {
                 transition={{ delay: 0.3 }}
                 className="text-5xl sm:text-6xl md:text-6xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold tracking-tight text-balance leading-tight sm:leading-tight md:leading-tight"
               >
-                Hi, I&apos;m{" "}
+                Yo, It&apos;s{" "}
                 <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                   Penguin
                 </span>
@@ -162,7 +147,7 @@ export default function Home() {
                 transition={{ delay: 0.4 }}
                 className="text-muted-foreground text-sm sm:text-base md:text-lg lg:text-xl xl:text-xl max-w-xl sm:max-w-2xl mx-auto lg:mx-0 text-pretty leading-relaxed"
               >
-                Digital Entity / Code Explorer.
+                2 feet tall handsome genius pegnuin
               </motion.p>
 
               <motion.div
@@ -172,25 +157,32 @@ export default function Home() {
                 className="flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4 md:gap-5"
               >
                 <div className="flex items-center gap-1.5 sm:gap-2 rounded-lg bg-card px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs sm:text-sm border border-border/50">
-                  <Code className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 text-primary" />
-                  React & Next.js
+                  <Snowflake className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 text-primary" />
+                  bery chilll
                 </div>
                 <div className="flex items-center gap-1.5 sm:gap-2 rounded-lg bg-card px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs sm:text-sm border border-border/50">
-                  <Coffee className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 text-primary" />
-                  Node.js & GraphQL
+                  <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 text-primary" />
+                  bery nonchalant
+                </div>
+                <div className="flex items-center gap-1.5 sm:gap-2 rounded-lg bg-card px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs sm:text-sm border border-border/50">
+                  <Brain className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 text-primary" />
+                  bery smart
                 </div>
               </motion.div>
             </div>
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.6 }}
-              className="relative mt-4 sm:mt-6 lg:mt-0 flex-shrink-0 hidden lg:block xl:block"
+              // use a short tween for snappier, less janky upscaling
+              whileHover={{ scale: 1.06 }}
+              transition={{ delay: 0.6, duration: 0.16, ease: "easeOut" }}
+              style={{ willChange: "transform" }}
+              className="relative mt-4 sm:mt-6 lg:mt-0 flex-shrink-0 hidden lg:block xl:block transform-gpu"
             >
               <div className="relative h-48 w-48 xl:h-56 xl:w-56 2xl:h-60 2xl:w-60 overflow-hidden rounded-full bg-gradient-to-br from-primary/20 to-accent/20 p-1 shadow-xl">
                 <Image
-                  src="/penguin_avatar.jpeg"
+                  src="/penguin_avatar.png"
                   alt="Penguin - Digital Entity"
                   width={256}
                   height={256}
@@ -214,32 +206,9 @@ export default function Home() {
             transition={{ delay: 0.8 }}
             className="z-10 w-full max-w-2xl mx-auto space-y-4 sm:space-y-5 md:space-y-6"
           >
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-2.5 md:gap-3">
-              {questionConfig.map(({ key, color, icon: Icon }) => (
-                <Button
-                  key={key}
-                  onClick={() => goToChat(questions[key])}
-                  variant="outline"
-                  className="h-auto cursor-pointer rounded-lg sm:rounded-xl bg-card/50 border-border/50 px-2.5 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 shadow-sm backdrop-blur-md transition-all hover:scale-105 hover:border-border/80 hover:bg-card/70 active:scale-95"
-                >
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-foreground">
-                    <Icon
-                      size={12}
-                      strokeWidth={2}
-                      style={{ color }}
-                      className="sm:h-3.5 sm:w-3.5 md:h-4 md:w-4"
-                    />
-                    <span className="text-xs sm:text-xs md:text-sm font-medium">
-                      {key}
-                    </span>
-                  </div>
-                </Button>
-              ))}
-            </div>
-
             {/* Page.tsx */}
             <form onSubmit={handleSubmit} className="relative">
-              <div className="flex items-end rounded-lg border-2 border-border/80 p-2 sm:p-2.5 shadow-lg backdrop-blur-xl transition-all duration-300 hover:border-border/90 focus-within:!border-primary/50 focus-within:!shadow-lg focus-within:!shadow-primary/10">
+              <div className="flex items-end rounded-3xl border-2 border-border/80 p-2 sm:p-2.5 shadow-lg backdrop-blur-xl transition-all duration-300 hover:border-border/90 focus-within:!border-primary/50 focus-within:!shadow-lg focus-within:!shadow-primary/10">
                 <textarea
                   ref={inputRef}
                   value={input}

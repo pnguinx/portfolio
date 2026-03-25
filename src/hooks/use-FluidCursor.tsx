@@ -1249,10 +1249,17 @@ const useFluidCursor = () => {
   }
 
   function generateColor() {
-    let c = HSVtoRGB(Math.random(), 1.0, 1.0);
-    c.r *= 0.15;
-    c.g *= 0.15;
-    c.b *= 0.15;
+    // Antarctic ice palette: hue 190-220° (cyan-blue), moderate saturation
+    const hue = 190 + Math.random() * 30;
+    const saturation = 0.5 + Math.random() * 0.4;
+    const lightness = 0.6 + Math.random() * 0.3;
+    const c_val = (1 - Math.abs(2 * lightness - 1)) * saturation;
+    const x = c_val * (1 - Math.abs(((hue / 60) % 2) - 1));
+    const m = lightness - c_val / 2;
+    let r1, g1, b1;
+    if (hue < 210) { r1 = 0; g1 = c_val; b1 = x; }
+    else { r1 = 0; g1 = x; b1 = c_val; }
+    let c = { r: (r1 + m) * 0.18, g: (g1 + m) * 0.18, b: (b1 + m) * 0.18 };
     return c;
   }
 

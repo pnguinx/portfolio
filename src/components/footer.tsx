@@ -8,7 +8,7 @@ interface Footer {
 }
 
 export default function Footer({ variant = "bottom", className = "" }: Footer) {
-  const baseClasses = "text-xs text-muted-foreground/60";
+  const baseClasses = "text-sm text-muted-foreground/60";
 
   const variantClasses = {
     bottom: "fixed bottom-4 left-1/2 transform -translate-x-1/2 z-10",

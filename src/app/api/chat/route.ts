@@ -70,7 +70,7 @@ function errorHandler(error: unknown): {
     ) {
       return {
         message: formatErrorMessage(
-          "API quota exceeded. Please try again tomorrow or upgrade your plan."
+          "API quota exceeded. Please try again tomorrow or upgrade your plan.",
         ),
         type: ERROR_TYPES.QUOTA_EXCEEDED,
         status: 429,
@@ -84,7 +84,7 @@ function errorHandler(error: unknown): {
     ) {
       return {
         message: formatErrorMessage(
-          "Authentication failed. Please check your API key configuration."
+          "Authentication failed. Please check your API key configuration.",
         ),
         type: ERROR_TYPES.AUTH_ERROR,
         status: 401,
@@ -98,7 +98,7 @@ function errorHandler(error: unknown): {
     ) {
       return {
         message: formatErrorMessage(
-          "Network error. Please check your connection and try again."
+          "Network error. Please check your connection and try again.",
         ),
         type: ERROR_TYPES.NETWORK_ERROR,
         status: 503,
@@ -226,47 +226,7 @@ function validateResponse(response: string, userQuery: string): boolean {
   return hasRelevantContent || response.length > 20;
 }
 
-function isCasualGreeting(userQuery: string): boolean {
-  const queryLower = userQuery.toLowerCase().trim();
-
-  const greetingKeywords = [
-    "hello",
-    "hi",
-    "hey",
-    "good morning",
-    "good afternoon",
-    "good evening",
-    "howdy",
-    "greetings",
-    "sup",
-    "what's up",
-    "whats up",
-    "yo",
-    "hiya",
-  ];
-
-  return (
-    greetingKeywords.some(
-      (keyword) =>
-        queryLower === keyword ||
-        queryLower.startsWith(keyword + " ") ||
-        queryLower.startsWith(keyword + ",") ||
-        queryLower.startsWith(keyword + "!")
-    ) && queryLower.length < 50
-  );
-}
-
-function generateGreetingResponse(): string {
-  const greetings = [
-    "Hey, what's up?",
-    "Hi there, what's on your mind today?",
-    "Hey! What would you like to know?",
-    "Hello! How can I help you today?",
-    "Hi! What's on your mind?",
-  ];
-
-  return greetings[Math.floor(Math.random() * greetings.length)];
-}
+// greeting handling is managed by the model via SYSTEM_PROMPT in prompt.ts
 
 function detectQueryType(userQuery: string): string | null {
   const queryLower = userQuery.toLowerCase();
@@ -449,19 +409,19 @@ function validateMessages(messages: any[]): Message[] {
   return messages.map((msg, index) => {
     if (!msg || typeof msg !== "object") {
       throw new Error(
-        `Invalid message format at index ${index}: must be an object`
+        `Invalid message format at index ${index}: must be an object`,
       );
     }
 
     if (!msg.role || !["user", "assistant"].includes(msg.role)) {
       throw new Error(
-        `Invalid role at index ${index}: must be 'user' or 'assistant'`
+        `Invalid role at index ${index}: must be 'user' or 'assistant'`,
       );
     }
 
     if (!msg.content || typeof msg.content !== "string") {
       throw new Error(
-        `Invalid content at index ${index}: must be a non-empty string`
+        `Invalid content at index ${index}: must be a non-empty string`,
       );
     }
 
@@ -469,7 +429,10 @@ function validateMessages(messages: any[]): Message[] {
       // Handle empty messages - convert to "what do you want to know?" query
       return {
         role: msg.role,
-        content: msg.role === "user" ? "what do you want to know?" : msg.content.trim(),
+        content:
+          msg.role === "user"
+            ? "what do you want to know?"
+            : msg.content.trim(),
         timestamp: msg.timestamp,
         id: msg.id,
       };
@@ -477,7 +440,7 @@ function validateMessages(messages: any[]): Message[] {
 
     if (msg.content.length > 10000) {
       throw new Error(
-        `Message too long at index ${index}: maximum 10,000 characters`
+        `Message too long at index ${index}: maximum 10,000 characters`,
       );
     }
 
@@ -493,30 +456,8 @@ function validateMessages(messages: any[]): Message[] {
 async function createStreamingResponse(
   result: any,
   userQuery: string,
-  requestId: string
+  requestId: string,
 ): Promise<ReadableStream> {
-  // Check for casual greetings first
-  if (isCasualGreeting(userQuery)) {
-    return new ReadableStream({
-      start(controller) {
-        const greetingResponse = generateGreetingResponse();
-
-        const chunkData = {
-          text: greetingResponse,
-          isComplete: true,
-          chunk: 1,
-          totalChunks: 1,
-          showProjectsButton: false,
-        };
-
-        controller.enqueue(
-          new TextEncoder().encode(`data: ${JSON.stringify(chunkData)}\n\n`)
-        );
-        controller.close();
-      },
-    });
-  }
-
   return new ReadableStream({
     async start(controller) {
       let chunkIndex = 0;
@@ -546,13 +487,13 @@ async function createStreamingResponse(
                 const chunkData = createStreamingChunk(
                   fullSentence,
                   chunkIndex,
-                  false
+                  false,
                 );
 
                 controller.enqueue(
                   new TextEncoder().encode(
-                    `data: ${JSON.stringify(chunkData)}\n\n`
-                  )
+                    `data: ${JSON.stringify(chunkData)}\n\n`,
+                  ),
                 );
               }
             }
@@ -569,10 +510,10 @@ async function createStreamingResponse(
             currentSentence.trim(),
             chunkIndex,
             true,
-            totalText // Pass full text for semantic analysis
+            totalText, // Pass full text for semantic analysis
           );
           controller.enqueue(
-            new TextEncoder().encode(`data: ${JSON.stringify(chunkData)}\n\n`)
+            new TextEncoder().encode(`data: ${JSON.stringify(chunkData)}\n\n`),
           );
         } else if (chunkIndex > 0) {
           // Mark the last sent chunk as complete with semantic analysis
@@ -580,10 +521,10 @@ async function createStreamingResponse(
             "",
             chunkIndex,
             true,
-            totalText
+            totalText,
           );
           controller.enqueue(
-            new TextEncoder().encode(`data: ${JSON.stringify(finalChunk)}\n\n`)
+            new TextEncoder().encode(`data: ${JSON.stringify(finalChunk)}\n\n`),
           );
         }
 
@@ -598,10 +539,10 @@ async function createStreamingResponse(
         const errorData = createStreamingError(
           errorInfo.message,
           errorInfo.type as keyof typeof ERROR_TYPES,
-          chunkIndex
+          chunkIndex,
         );
         controller.enqueue(
-          new TextEncoder().encode(`data: ${JSON.stringify(errorData)}\n\n`)
+          new TextEncoder().encode(`data: ${JSON.stringify(errorData)}\n\n`),
         );
         controller.close();
       }
@@ -626,7 +567,7 @@ export async function POST(req: Request) {
       const errorResponse = createErrorResponse(
         ERROR_TYPES.RATE_LIMIT_ERROR,
         "Rate limit exceeded. Please try again later.",
-        { retryAfter: Math.ceil(RATE_LIMIT_WINDOW_MS / 1000) }
+        { retryAfter: Math.ceil(RATE_LIMIT_WINDOW_MS / 1000) },
       );
       return new Response(JSON.stringify(errorResponse), {
         status: 429,
@@ -648,7 +589,7 @@ export async function POST(req: Request) {
     } catch (parseError) {
       const errorResponse = createErrorResponse(
         ERROR_TYPES.PARSE_ERROR,
-        "Invalid JSON in request body"
+        "Invalid JSON in request body",
       );
       return new Response(JSON.stringify(errorResponse), {
         status: 400,
@@ -665,7 +606,7 @@ export async function POST(req: Request) {
         ERROR_TYPES.VALIDATION_ERROR,
         validationError instanceof Error
           ? validationError.message
-          : "Invalid message format"
+          : "Invalid message format",
       );
       return new Response(JSON.stringify(errorResponse), {
         status: 400,
@@ -682,7 +623,7 @@ export async function POST(req: Request) {
       ) {
         const errorResponse = createErrorResponse(
           ERROR_TYPES.VALIDATION_ERROR,
-          "Invalid style option. Available options: polite, concise, versatile, creative"
+          "Invalid style option. Available options: polite, concise, versatile, creative",
         );
         return new Response(JSON.stringify(errorResponse), {
           status: 400,
@@ -711,7 +652,9 @@ export async function POST(req: Request) {
               showProjectsButton: false,
             };
             controller.enqueue(
-              new TextEncoder().encode(`data: ${JSON.stringify(chunkData)}\n\n`)
+              new TextEncoder().encode(
+                `data: ${JSON.stringify(chunkData)}\n\n`,
+              ),
             );
             controller.close();
           },
@@ -723,7 +666,7 @@ export async function POST(req: Request) {
             Connection: "keep-alive",
             "Access-Control-Allow-Origin": "*",
           },
-        }
+        },
       );
     }
 
@@ -767,7 +710,7 @@ export async function POST(req: Request) {
       const errorInfo = errorHandler(apiError);
       const errorResponse = createErrorResponse(
         errorInfo.type as keyof typeof ERROR_TYPES,
-        errorInfo.message
+        errorInfo.message,
       );
       return new Response(JSON.stringify(errorResponse), {
         status: errorInfo.status,
@@ -799,7 +742,7 @@ export async function POST(req: Request) {
     const errorResponse = createErrorResponse(
       errorInfo.type as keyof typeof ERROR_TYPES,
       errorInfo.message,
-      { processingTime }
+      { processingTime },
     );
 
     return new Response(JSON.stringify(errorResponse), {
@@ -837,7 +780,7 @@ export async function GET(req: Request) {
     "GET method is deprecated. Please use POST method instead.",
     {
       recommendation: "Use POST /api/chat with messages in the request body",
-    }
+    },
   );
 
   return new Response(JSON.stringify(errorResponse), {

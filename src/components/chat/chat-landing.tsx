@@ -18,14 +18,7 @@ const ChatLanding: React.FC<ChatLandingProps> = ({
       icon: <MessageSquare className="h-4 w-4" />,
       text: "Who are you?",
     },
-    {
-      icon: <Code className="h-4 w-4" />,
-      text: "What projects have you worked on?",
-    },
-    {
-      icon: <Award className="h-4 w-4" />,
-      text: "What are your skills?",
-    },
+
     {
       icon: <Mail className="h-4 w-4" />,
       text: "How can I contact you?",

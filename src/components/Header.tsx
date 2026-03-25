@@ -52,12 +52,7 @@ export default function Header() {
           </Link>
 
           <nav className="hidden md:flex items-center justify-center gap-6 col-start-2">
-            <Link
-              href="/projects"
-              className="text-muted-foreground hover:text-foreground px-2 py-1 rounded transition-colors"
-            >
-              Work
-            </Link>
+         
             <Link
               href="/chat"
               className="text-muted-foreground hover:text-foreground px-2 py-1 rounded transition-colors"
@@ -136,13 +131,7 @@ export default function Header() {
             {/* centered nav inside sidebar */}
             <div className="h-full flex items-center justify-center px-6">
               <nav className="flex flex-col items-center gap-6">
-                <Link
-                  href="/projects"
-                  className="text-foreground hover:text-primary text-lg transition-colors"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Work
-                </Link>
+                
                 <Link
                   href="/chat"
                   className="text-foreground hover:text-primary text-lg transition-colors"

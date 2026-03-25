@@ -93,7 +93,7 @@ function chatReducer(state: ChatState, action: ChatAction): ChatState {
       return {
         ...state,
         messages: state.messages.map((msg) =>
-          msg.id === id ? { ...msg, content } : msg
+          msg.id === id ? { ...msg, content } : msg,
         ),
       };
 
@@ -301,7 +301,7 @@ const Chat = () => {
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [showMessageInfo, setShowMessageInfo] = useState(false);
   const [textareaRef, setTextareaRef] = useState<HTMLTextAreaElement | null>(
-    null
+    null,
   );
 
   const conversationStorageRef = useRef<Message[]>([]);
@@ -327,7 +327,7 @@ const Chat = () => {
 
   const generateId = useCallback(
     () => Math.random().toString(36).substring(2, 15),
-    []
+    [],
   );
 
   const loadConversation = useCallback(() => {
@@ -414,7 +414,7 @@ const Chat = () => {
       });
     } else {
       console.log(
-        "[SCROLL] Skipping scroll - user not near bottom or is scrolling"
+        "[SCROLL] Skipping scroll - user not near bottom or is scrolling",
       );
     }
   }, []);
@@ -469,7 +469,7 @@ const Chat = () => {
         root: scrollContainerRef.current,
         threshold: 0.1,
         rootMargin: "0px 0px 50px 0px", // Reduced margin for more precise detection
-      }
+      },
     );
 
     observer.observe(endElement);
@@ -499,7 +499,7 @@ const Chat = () => {
     (style: "polite" | "concise" | "versatile" | "creative") => {
       dispatch({ type: "SET_SELECTED_STYLE", payload: style });
     },
-    []
+    [],
   );
 
   const handleInputChange = useCallback(
@@ -512,7 +512,7 @@ const Chat = () => {
       const newHeight = Math.min(scrollHeight, 120);
       textarea.style.height = `${newHeight}px`;
     },
-    []
+    [],
   );
 
   useEffect(() => {
@@ -553,7 +553,7 @@ const Chat = () => {
         reader.releaseLock();
       }
     },
-    []
+    [],
   );
 
   const processBuffer = useCallback(
@@ -598,7 +598,7 @@ const Chat = () => {
 
               if (parsed.isComplete) {
                 console.log(
-                  `[CHAT-UI] Completed structured response: ${parsed.responseType}`
+                  `[CHAT-UI] Completed structured response: ${parsed.responseType}`,
                 );
               }
             }
@@ -628,7 +628,7 @@ const Chat = () => {
             console.warn(
               "[CHAT-UI] Failed to parse streaming data:",
               data,
-              parseError
+              parseError,
             );
           }
         } else if (i === lines.length - 1 && line) {
@@ -638,7 +638,7 @@ const Chat = () => {
 
       return remainingBuffer;
     },
-    [chunkCount]
+    [chunkCount],
   );
 
   const submitQuery = useCallback(
@@ -767,7 +767,7 @@ const Chat = () => {
       generateId,
       handleStreamingResponse,
       scrollToBottom,
-    ]
+    ],
   );
 
   const onSubmit = useCallback(
@@ -781,7 +781,7 @@ const Chat = () => {
 
       submitQuery(currentInput);
     },
-    [input, loadingSubmit, submitQuery]
+    [input, loadingSubmit, submitQuery],
   );
 
   const handleStop = useCallback(() => {
@@ -855,7 +855,7 @@ const Chat = () => {
         msg.content.toLowerCase().includes("talent-tube") ||
         msg.content.toLowerCase().includes("tuneit") ||
         msg.content.toLowerCase().includes("github bot") ||
-        msg.content.toLowerCase().includes("sensify"))
+        msg.content.toLowerCase().includes("sensify")),
   );
 
   return (
@@ -884,7 +884,7 @@ const Chat = () => {
               className="text-muted-foreground hover:text-foreground hover:bg-accent/20 rounded-xl p-1.5 transition-all duration-200 hover:scale-105 active:scale-95"
               onClick={() => {
                 toast.info(
-                  "This is Siraj Ahmed's AI assistant. Ask me anything!"
+                  "This is Siraj Ahmed's AI assistant. Ask me anything!",
                 );
               }}
             >
@@ -987,7 +987,7 @@ const Chat = () => {
                                         {
                                           hour: "2-digit",
                                           minute: "2-digit",
-                                        }
+                                        },
                                       )}
                                     </span>
                                   </div>
@@ -1117,6 +1117,10 @@ const Chat = () => {
                     <ChevronUp className="h-4 w-4 md:h-4 md:w-4" />
                   )}
                 </button>
+              </div>
+              <div className="mt-2 text-xs text-muted-foreground text-center">
+                If he behaves badly or writes nonsense dm me on discord (pnguins).
+                Thank youuuuuuu
               </div>
             </form>
           </div>

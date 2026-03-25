@@ -16,7 +16,7 @@ const Skills = () => {
         'React Native',
         'Tailwind CSS',
       ],
-      color: 'bg-blue-50 text-blue-600 border border-blue-200',
+      color: 'bg-accent/30 text-primary border-primary/20',
     },
     {
       category: 'Backend & Systems',
@@ -33,7 +33,7 @@ const Skills = () => {
         'GitLens',
         'Ubuntu 25',
       ],
-      color: 'bg-emerald-50 text-emerald-600 border border-emerald-200',
+      color: 'bg-secondary/20 text-secondary-foreground border-secondary/30',
     },
     {
       category: 'Mobile Development',
@@ -42,7 +42,7 @@ const Skills = () => {
         'React Native',
         'Android (Kotlin/Java)',
       ],
-      color: 'bg-indigo-50 text-indigo-600 border border-indigo-200',
+      color: 'bg-muted text-accent-foreground border-accent/40',
     },
     {
       category: 'Soft Skills',
@@ -54,7 +54,7 @@ const Skills = () => {
         'Strong focus',
         'Clean code principles',
       ],
-      color: 'bg-amber-50 text-amber-600 border border-amber-200',
+      color: 'bg-primary/10 text-primary border-primary/15',
     },
   ];
 
