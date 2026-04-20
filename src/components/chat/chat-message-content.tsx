@@ -7,7 +7,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import ExpandableText from "@/components/ui/expandable-text";
-import { ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
+import { ChevronDown, ChevronUp, ExternalLink, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -15,6 +15,23 @@ import {
   SemanticChunkRenderer,
   FallbackRenderer,
 } from "./semantic-chunk-renderer";
+
+// Utility function to extract Siraj redirect URL from message content
+const extractSirajUrl = (content: string): string | null => {
+  const urlRegex = /\/chat\?query=[^\s]+&style=polite/;
+  const match = content.match(urlRegex);
+  return match ? match[0] : null;
+};
+
+// Utility function to check if message mentions siraj
+const hasSirajMention = (content: string): boolean => {
+  return /siraj/i.test(content);
+};
+
+// Utility function to remove the URL from content for display
+const removeUrlFromContent = (content: string): string => {
+  return content.replace(/\s*\/chat\?query=[^\s]+&style=polite\s*/g, " ").trim();
+};
 
 interface Message {
   id: string;
@@ -172,10 +189,22 @@ export default function ChatMessageContent({
         message.content.toLowerCase().includes("sensify") ||
         message.content.toLowerCase().includes("global parcel"));
 
+    // Check for Siraj mention and extract URL
+    const hasSiraj = hasSirajMention(message.content);
+    const sirajUrl = hasSiraj ? extractSirajUrl(message.content) : null;
+    const finalSirajUrl = sirajUrl 
+      ? `https://portfolio-dusky-three-40.vercel.app${sirajUrl}`
+      : "https://portfolio-dusky-three-40.vercel.app/chat?query=hello&style=polite";
+
     // Remove the marker from display
-    const displayContent = message.content
+    let displayContent = message.content
       .replace("[SHOW_PROJECTS_BUTTON]", "")
       .trim();
+
+    // Remove the URL from display content if siraj is mentioned
+    if (hasSiraj) {
+      displayContent = removeUrlFromContent(displayContent);
+    }
 
     // Capitalize first letter for assistant responses
     const processedContent =
@@ -194,7 +223,7 @@ export default function ChatMessageContent({
       semantic.chunks.length > 0
     ) {
       return (
-        <div className="w-full">
+        <div className="w-full space-y-4">
           <SemanticChunkRenderer chunks={semantic.chunks} />
           {shouldShowProjectsButton && message.role === "assistant" && (
             <div className="mt-4">
@@ -205,6 +234,19 @@ export default function ChatMessageContent({
               >
                 <ExternalLink className="h-4 w-4" />
                 View Projects
+              </Button>
+            </div>
+          )}
+          {hasSiraj && message.role === "assistant" && (
+            <div className="mt-4">
+              <Button
+                onClick={() => window.open(finalSirajUrl, "_blank")}
+                className="flex items-center gap-2"
+                variant="outline"
+                size="sm"
+              >
+                ask siraj
+                <ArrowRight className="h-3 w-3" />
               </Button>
             </div>
           )}
@@ -286,6 +328,19 @@ export default function ChatMessageContent({
               >
                 <ExternalLink className="h-4 w-4" />
                 View My Projects
+              </Button>
+            </div>
+          )}
+          {hasSiraj && message.role === "assistant" && (
+            <div className="mt-4">
+              <Button
+                onClick={() => window.open(finalSirajUrl, "_blank")}
+                className="flex items-center gap-2"
+                variant="outline"
+                size="sm"
+              >
+                ask siraj
+                <ArrowRight className="h-3 w-3" />
               </Button>
             </div>
           )}
@@ -378,6 +433,19 @@ export default function ChatMessageContent({
               >
                 <ExternalLink className="h-4 w-4" />
                 View My Projects
+              </Button>
+            </div>
+          )}
+          {hasSiraj && message.role === "assistant" && (
+            <div className="mt-4">
+              <Button
+                onClick={() => window.open(finalSirajUrl, "_blank")}
+                className="flex items-center gap-2"
+                variant="outline"
+                size="sm"
+              >
+                ask siraj
+                <ArrowRight className="h-3 w-3" />
               </Button>
             </div>
           )}

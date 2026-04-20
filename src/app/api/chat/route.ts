@@ -21,7 +21,7 @@ const groq = new Groq({
 
 const MODEL_CONFIGS = {
   polite: {
-    model: "openai/gpt-oss-20b",
+      model:"meta-llama/llama-4-scout-17b-16e-instruct",
     description: "Fast and friendly responses",
   },
   concise: {
