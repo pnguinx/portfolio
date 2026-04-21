@@ -6,6 +6,9 @@ import {
   Laugh,
   Layers,
   UserRoundSearch,
+  Code,
+  Clapperboard,
+  Sparkles,
 } from "lucide-react";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
@@ -15,10 +18,13 @@ interface HelperBoostProps {
 }
 
 const questions = {
-  Me: "Who are you? I want to know more about you.",
-  Projects: "What are your projects? What are you working on right now?",
-  Skills: "What are your skills? Give me a list of your soft and hard skills.",
-  Contact: "How can I reach you?",
+  Me: "who are you? i want to know more about you.",
+  Projects: "what are your projects? what are you working on right now?",
+  Skills: "what are your skills? give me a list of your soft and hard skills.",
+  Contact: "how can i reach you?",
+  Tech: "what's your tech stack? what tools and technologies do you use?",
+  Movies: "tell me about your favorite sci-fi movie or thriller. what's your movie taste?",
+  Interests: "what are your hobbies and interests? anime? sports? manga?",
 };
 
 const questionConfig = [
@@ -26,6 +32,9 @@ const questionConfig = [
   { key: "Projects", color: "#3E9858", icon: BriefcaseBusiness },
   { key: "Skills", color: "#856ED9", icon: Layers },
   { key: "Contact", color: "#C19433", icon: UserRoundSearch },
+  { key: "Tech", color: "#1E88E5", icon: Code },
+  { key: "Movies", color: "#E53935", icon: Clapperboard },
+  { key: "Interests", color: "#00ACC1", icon: Sparkles },
 ];
 
 export default React.memo(function HelperBoost({
@@ -86,7 +95,7 @@ export default React.memo(function HelperBoost({
       >
         <button
           onClick={toggleVisibility}
-          className="text-muted-foreground hover:text-foreground hover:bg-card/10 flex items-center gap-1.5 md:gap-2 rounded-xl px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm transition-all duration-300 active:scale-95 hover:shadow-md backdrop-blur-xl border border-border/10 hover:border-border/30 bg-card/2"
+          className="text-muted-foreground hover:text-foreground hover:bg-card/10 flex items-center gap-1.5 md:gap-2 rounded-xl px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm transition-all duration-300 active:scale-95 hover:shadow-md backdrop-blur-xl border border-border/10 hover:border-border/30 bg-card/2 lowercase"
         >
           {isVisible ? (
             <>
@@ -96,7 +105,7 @@ export default React.memo(function HelperBoost({
                 strokeWidth={2.5}
               />
               <span className="font-semibold leading-relaxed">
-                Hide suggestions
+                hide suggestions
               </span>
             </>
           ) : (
@@ -107,7 +116,7 @@ export default React.memo(function HelperBoost({
                 strokeWidth={2.5}
               />
               <span className="font-semibold leading-relaxed">
-                Show suggestions
+                show suggestions
               </span>
             </>
           )}

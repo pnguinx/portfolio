@@ -69,8 +69,8 @@ const CodeBlock = ({ content }: { content: string }) => {
       className="my-4 w-full overflow-hidden rounded-md"
     >
       <div className="bg-secondary text-secondary-foreground flex items-center justify-between rounded-t-md border-b px-4 py-1">
-        <span className="text-sm">
-          {language !== "text" ? language : "Code"}
+        <span className="text-sm lowercase">
+          {language !== "text" ? language : "code"}
         </span>
         <CollapsibleTrigger className="hover:bg-secondary/80 rounded p-1">
           {isOpen ? (
@@ -229,11 +229,11 @@ export default function ChatMessageContent({
             <div className="mt-4">
               <Button
                 onClick={() => (window.location.href = "/projects")}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2 lowercase"
                 variant="outline"
               >
                 <ExternalLink className="h-4 w-4" />
-                View Projects
+                view projects
               </Button>
             </div>
           )}

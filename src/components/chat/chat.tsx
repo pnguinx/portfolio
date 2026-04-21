@@ -182,8 +182,8 @@ const MessageInfoDialog = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-6 flex items-center justify-between">
-          <h3 className="text-foreground text-lg font-semibold">
-            Message Details
+          <h3 className="text-foreground text-lg font-semibold lowercase">
+            message details
           </h3>
           <button
             onClick={onClose}
@@ -196,7 +196,7 @@ const MessageInfoDialog = ({
         <div className="space-y-4">
           {/* Message Preview */}
           <div className="border-border/30 rounded-lg border bg-muted/30 p-3">
-            <p className="text-sm text-muted-foreground mb-2">Preview:</p>
+            <p className="text-sm text-muted-foreground mb-2 lowercase">preview:</p>
             <p className="text-sm text-foreground line-clamp-3">
               {message.content}
             </p>
@@ -208,44 +208,44 @@ const MessageInfoDialog = ({
               <span className="text-2xl font-bold text-primary">
                 {stats.words}
               </span>
-              <span className="text-xs text-muted-foreground">Words</span>
+              <span className="text-xs text-muted-foreground lowercase">words</span>
             </div>
             <div className="border-border/30 flex flex-col items-center rounded-lg border bg-muted/20 p-3">
               <span className="text-2xl font-bold text-primary">
                 {stats.characters}
               </span>
-              <span className="text-xs text-muted-foreground">Characters</span>
+              <span className="text-xs text-muted-foreground lowercase">characters</span>
             </div>
             <div className="border-border/30 flex flex-col items-center rounded-lg border bg-muted/20 p-3">
               <span className="text-2xl font-bold text-primary">
                 {stats.charactersNoSpaces}
               </span>
-              <span className="text-xs text-muted-foreground">No Spaces</span>
+              <span className="text-xs text-muted-foreground lowercase">no spaces</span>
             </div>
             <div className="border-border/30 flex flex-col items-center rounded-lg border bg-muted/20 p-3">
               <span className="text-2xl font-bold text-primary">
                 {stats.readingTime}m
               </span>
-              <span className="text-xs text-muted-foreground">Read Time</span>
+              <span className="text-xs text-muted-foreground lowercase">read time</span>
             </div>
           </div>
 
           {/* Message Info */}
           <div className="space-y-3">
             <div className="border-border/30 flex items-center justify-between border-b py-2">
-              <span className="text-muted-foreground text-sm">From</span>
-              <span className="text-sm font-medium">
-                {message.role === "assistant" ? "Penguin" : "You"}
+              <span className="text-muted-foreground text-sm lowercase">from</span>
+              <span className="text-sm font-medium lowercase">
+                {message.role === "assistant" ? "penguin" : "you"}
               </span>
             </div>
             <div className="border-border/30 flex items-center justify-between border-b py-2">
-              <span className="text-muted-foreground text-sm">Sent</span>
+              <span className="text-muted-foreground text-sm lowercase">sent</span>
               <span className="text-sm font-medium">
                 {formatDate(message.timestamp)}
               </span>
             </div>
             <div className="flex items-center justify-between py-2">
-              <span className="text-muted-foreground text-sm">Message ID</span>
+              <span className="text-muted-foreground text-sm lowercase">message id</span>
               <span className="text-xs font-mono text-muted-foreground">
                 {message.id.substring(0, 8)}...
               </span>
@@ -317,9 +317,9 @@ const Chat = () => {
       textArea.select();
       try {
         document.execCommand("copy");
-        toast.success("Copied to clipboard!");
+        toast.success("copied to clipboard!");
       } catch {
-        toast.error("Failed to copy text");
+        toast.error("failed to copy text");
       }
       document.body.removeChild(textArea);
     }
@@ -884,7 +884,7 @@ const Chat = () => {
               className="text-muted-foreground hover:text-foreground hover:bg-accent/20 rounded-xl p-1.5 transition-all duration-200 hover:scale-105 active:scale-95"
               onClick={() => {
                 toast.info(
-                  "This is Siraj Ahmed's AI assistant. Ask me anything!",
+                  "this is penguin's ai assistant. ask me anything!",
                 );
               }}
             >
@@ -896,7 +896,7 @@ const Chat = () => {
         <div className="flex-1 overflow-hidden min-h-0 flex flex-col relative will-change-scroll">
           <div
             ref={scrollContainerRef}
-            className="h-full overflow-y-auto px-4 pt-8 pb-48 md:pb-44 scroll-smooth"
+            className="h-full overflow-y-auto px-4 pt-3 md:pt-4 pb-16 md:pb-24 scroll-smooth"
             style={{
               WebkitOverflowScrolling: "touch",
               scrollbarWidth: "thin",
@@ -913,7 +913,7 @@ const Chat = () => {
                 {isEmptyState ? (
                   <motion.div
                     key="landing"
-                    className="flex h-full items-center justify-center py-8 px-4"
+                    className="flex h-full items-center justify-center py-4 px-4"
                     {...MOTION_CONFIG}
                   >
                     <ChatLanding submitQuery={submitQuery} />
@@ -921,7 +921,7 @@ const Chat = () => {
                 ) : (
                   <motion.div
                     key="conversation"
-                    className="flex flex-col space-y-6 md:space-y-8 pb-6 min-h-full"
+                    className="flex flex-col space-y-4 md:space-y-6 pb-4 min-h-full"
                     {...MOTION_CONFIG}
                   >
                     {messages.map((message, index) => (
@@ -1118,10 +1118,7 @@ const Chat = () => {
                   )}
                 </button>
               </div>
-              <div className="mt-2 text-xs text-muted-foreground text-center">
-                If he behaves badly or writes nonsense dm me on discord (pnguins).
-                Thank youuuuuuu
-              </div>
+             
             </form>
           </div>
         </div>

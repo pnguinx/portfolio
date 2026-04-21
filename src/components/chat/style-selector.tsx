@@ -15,26 +15,26 @@ interface StyleSelectorProps {
 const STYLE_OPTIONS = [
   {
     id: "polite" as const,
-    label: "Polite",
-    description: "Friendly & conversational",
+    label: "polite",
+    description: "friendly & conversational",
     color: "text-blue-500",
   },
   {
     id: "concise" as const,
-    label: "Concise",
-    description: "Direct & to the point",
+    label: "concise",
+    description: "direct & to the point",
     color: "text-green-500",
   },
   {
     id: "versatile" as const,
-    label: "Versatile",
-    description: "Balanced & detailed",
+    label: "versatile",
+    description: "balanced & detailed",
     color: "text-purple-500",
   },
   {
     id: "creative" as const,
-    label: "Creative",
-    description: "Fun & imaginative",
+    label: "creative",
+    description: "fun & imaginative",
     color: "text-orange-500",
   },
 ];
@@ -88,7 +88,7 @@ export default function StyleSelector({
               className="absolute bottom-full mb-2 right-0 z-50 w-48 bg-card/95 backdrop-blur-xl border border-border/20 rounded-lg shadow-xl overflow-hidden"
             >
               <div className="px-3 py-2 border-b border-border/10">
-                <p className="text-xs text-red-500 font-medium">Experimental</p>
+                <p className="text-xs text-red-500 font-medium lowercase">experimental</p>
               </div>
               {STYLE_OPTIONS.map((option) => {
                 const isSelected = selectedStyle === option.id;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Github, Star, Menu, X } from "lucide-react";
+import { Github, Star, MessageCircle } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -9,7 +9,6 @@ import { usePathname } from "next/navigation";
 export default function Header() {
   const [stars, setStars] = useState<number | null>(null);
   const [error, setError] = useState<boolean>(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
   const isChatPage = pathname === "/chat";
 
@@ -30,14 +29,6 @@ export default function Header() {
     fetchStars();
   }, []);
 
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMobileOpen(false);
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
-
   if (isChatPage) return null;
 
   return (
@@ -46,46 +37,39 @@ export default function Header() {
         <div className="grid grid-cols-3 h-full items-center px-4 max-w-5xl mx-auto">
           <Link
             href="/"
-            className="font-bold text-lg tracking-tight text-foreground hover:text-primary transition-colors"
+            className="font-bold text-lg tracking-tight text-foreground hover:text-primary transition-colors lowercase"
           >
-            Penguin
+            penguin
           </Link>
 
           <nav className="hidden md:flex items-center justify-center gap-6 col-start-2">
          
             <Link
               href="/chat"
-              className="text-muted-foreground hover:text-foreground px-2 py-1 rounded transition-colors"
+              className="text-muted-foreground hover:text-foreground px-2 py-1 rounded transition-colors lowercase"
             >
-              Chat
+              chat
             </Link>
           </nav>
 
           <div className="flex items-center gap-2 justify-end col-start-3">
-            {/* mobile menu button */}
-            <button
-              type="button"
+            {/* mobile chat link button */}
+            <Link
+              href="/chat"
               className="md:hidden inline-flex items-center justify-center rounded p-2 text-foreground hover:bg-muted transition-colors"
-              aria-label={mobileOpen ? "Close menu" : "Open menu"}
-              aria-expanded={mobileOpen}
-              aria-controls="mobile-sidebar"
-              onClick={() => setMobileOpen((v) => !v)}
+              aria-label="Open chat"
             >
-              {mobileOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
+              <MessageCircle className="h-6 w-6" />
+            </Link>
 
             <div className="hidden md:flex items-center gap-3">
               <a
                 href="https://github.com/sirajahmedx/portfolio"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 px-2 py-1 rounded text-muted-foreground hover:text-foreground transition-colors"
+                className="flex items-center gap-1 px-2 py-1 rounded text-muted-foreground hover:text-foreground transition-colors lowercase"
                 aria-label="View portfolio repository on GitHub"
-                title={`Stars on portfolio repo: ${stars !== null ? stars.toLocaleString() : "..."}`}
+                title={`stars on portfolio repo: ${stars !== null ? stars.toLocaleString() : "..."}`}
               >
                 <Github className="h-5 w-5" />
                 <span className="font-mono text-sm min-w-[32px] text-center">
@@ -104,46 +88,6 @@ export default function Header() {
           </div>
         </div>
       </header>
-
-      {mobileOpen && (
-        <div
-          className="fixed inset-0 z-[60]"
-          role="dialog"
-          aria-modal="true"
-          id="mobile-sidebar"
-        >
-          {/* overlay */}
-          <div
-            className="absolute inset-0 bg-background/60 backdrop-blur-sm"
-            onClick={() => setMobileOpen(false)}
-          />
-          {/* sidebar panel */}
-          <aside className="absolute inset-y-0 left-0 w-72 max-w-[85%] bg-background border-r border-border shadow-lg">
-            <button
-              type="button"
-              className="absolute top-4 right-4 inline-flex items-center justify-center rounded p-2 text-foreground hover:bg-muted transition-colors"
-              aria-label="Close menu"
-              onClick={() => setMobileOpen(false)}
-            >
-              <X className="h-5 w-5" />
-            </button>
-
-            {/* centered nav inside sidebar */}
-            <div className="h-full flex items-center justify-center px-6">
-              <nav className="flex flex-col items-center gap-6">
-                
-                <Link
-                  href="/chat"
-                  className="text-foreground hover:text-primary text-lg transition-colors"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Chat
-                </Link>
-              </nav>
-            </div>
-          </aside>
-        </div>
-      )}
     </>
   );
 }

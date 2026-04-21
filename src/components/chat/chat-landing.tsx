@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Brain, Code, MessageSquare, User, Award, Mail } from "lucide-react";
+import { Brain, Code, MessageSquare, User, Award, Mail, Zap, BookOpen, Lightbulb } from "lucide-react";
 import React from "react";
 
 interface ChatLandingProps {
@@ -16,12 +16,27 @@ const ChatLanding: React.FC<ChatLandingProps> = ({
   const suggestedQuestions = [
     {
       icon: <MessageSquare className="h-4 w-4" />,
-      text: "Who are you?",
+      text: "who are you?",
     },
-
+    {
+      icon: <Code className="h-4 w-4" />,
+      text: "what projects have you built?",
+    },
+    {
+      icon: <Brain className="h-4 w-4" />,
+      text: "what are your tech skills?",
+    },
+    {
+      icon: <Lightbulb className="h-4 w-4" />,
+      text: "what's your approach to problem solving?",
+    },
+    {
+      icon: <BookOpen className="h-4 w-4" />,
+      text: "tell me about your experience",
+    },
     {
       icon: <Mail className="h-4 w-4" />,
-      text: "How can I contact you?",
+      text: "how can i contact you?",
     },
   ];
 
@@ -55,10 +70,10 @@ const ChatLanding: React.FC<ChatLandingProps> = ({
     >
       <motion.div className="mb-3 md:mb-5 text-center" variants={itemVariants}>
         <h2 className="mb-2 md:mb-3 text-2xl md:text-3xl font-semibold leading-relaxed">
-          Hey, I’m Penguin..
+          hey, i'm penguin..
         </h2>
         {/* <p className="text-muted-foreground mx-auto max-w-md text-sm md:text-base leading-relaxed">
-          A passionate 16-year-old developer from Pakistan.
+          a passionate 16-year-old developer from pakistan.
         </p> */}
       </motion.div>
 
@@ -83,7 +98,7 @@ const ChatLanding: React.FC<ChatLandingProps> = ({
             <span className="bg-background mr-2 md:mr-3 rounded-full p-2 md:p-2">
               {question.icon}
             </span>
-            <span className="text-left text-sm md:text-base leading-relaxed">
+            <span className="text-left text-sm md:text-base leading-relaxed lowercase">
               {question.text}
             </span>
           </motion.button>

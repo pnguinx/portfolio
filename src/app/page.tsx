@@ -51,17 +51,19 @@ export default function Home() {
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.style.height = "auto";
-      inputRef.current.style.height = `${Math.min(inputRef.current.scrollHeight, 80)}px`;
+      inputRef.current.style.height = `${Math.min(inputRef.current.scrollHeight, 140)}px`;
     }
   }, [input]);
 
-  const heroVariants = {
-    hidden: { opacity: 0, y: 60 },
-    visible: { opacity: 1, y: 0 },
-  };
-
+  // Auto-focus on mount
   useEffect(() => {
-    // Preload assets
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
+  // Preload assets
+  useEffect(() => {
     const img = new window.Image();
     img.src = "/landing-memojis.png";
 
@@ -78,12 +80,10 @@ export default function Home() {
     document.head.appendChild(linkMp4);
   }, []);
 
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.style.height = "auto";
-      inputRef.current.style.height = `${Math.min(inputRef.current.scrollHeight, 140)}px`;
-    }
-  }, [input]);
+  const heroVariants = {
+    hidden: { opacity: 0, y: 60 },
+    visible: { opacity: 1, y: 0 },
+  };
 
   return (
     <div className="relative min-h-[90vh] lg:min-h-screen flex flex-col">
@@ -133,11 +133,11 @@ export default function Home() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="text-5xl sm:text-6xl md:text-6xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold tracking-tight text-balance leading-tight sm:leading-tight md:leading-tight"
+                className="text-5xl sm:text-6xl md:text-6xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold tracking-tight text-balance leading-tight sm:leading-tight md:leading-tight lowercase"
               >
-                Yo, It&apos;s{" "}
+                yo, it&apos;s{" "}
                 <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  Penguin
+                  penguin
                 </span>
               </motion.h1>
 
@@ -145,9 +145,9 @@ export default function Home() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="text-muted-foreground text-sm sm:text-base md:text-lg lg:text-xl xl:text-xl max-w-xl sm:max-w-2xl mx-auto lg:mx-0 text-pretty leading-relaxed"
+                className="text-muted-foreground text-sm sm:text-base md:text-lg lg:text-xl xl:text-xl max-w-xl sm:max-w-2xl mx-auto lg:mx-0 text-pretty leading-relaxed lowercase"
               >
-                2 feet tall handsome genius pegnuin
+                2 feet tall handsome genius penguin
               </motion.p>
 
               <motion.div
@@ -208,7 +208,7 @@ export default function Home() {
           >
             {/* Page.tsx */}
             <form onSubmit={handleSubmit} className="relative">
-              <div className="flex items-end rounded-3xl border-2 border-border/80 p-2 sm:p-2.5 shadow-lg backdrop-blur-xl transition-all duration-300 hover:border-border/90 focus-within:!border-primary/50 focus-within:!shadow-lg focus-within:!shadow-primary/10">
+              <div className="flex items-end rounded-3xl border-2 border-border/80 p-2 sm:p-3 shadow-lg backdrop-blur-xl transition-all duration-300 hover:border-border/90 focus-within:!border-primary/50 focus-within:!shadow-lg focus-within:!shadow-primary/10">
                 <textarea
                   ref={inputRef}
                   value={input}
@@ -221,12 +221,12 @@ export default function Home() {
                       }
                     }
                   }}
-                  placeholder="Ask me anything..."
-                  className="flex-1 border-none bg-transparent px-3 py-3 sm:px-4 sm:py-3 text-sm sm:text-base text-foreground placeholder:text-muted-foreground focus:outline-none resize-none overflow-hidden"
+                  placeholder="ask me anything..."
+                  className="flex-1 border-none bg-transparent px-3 py-2.5 sm:px-4 sm:py-2.5 text-sm sm:text-base text-foreground placeholder:text-muted-foreground focus:outline-none resize-none overflow-hidden lowercase"
                   style={{
                     height: "auto",
-                    minHeight: "48px",
-                    maxHeight: "140px",
+                    minHeight: "2.5rem",
+                    maxHeight: "5.5rem",
                   }}
                   rows={1}
                 />
@@ -239,7 +239,7 @@ export default function Home() {
                 <button
                   type="submit"
                   disabled={!input.trim()}
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 flex items-center justify-center px-3 py-3 rounded-full mb-1 transition-all duration-200 disabled:opacity-50 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 flex items-center justify-center px-2 py-2 rounded-lg transition-all duration-200 disabled:opacity-50 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg"
                 >
                   <ArrowUp className="h-4 w-4 md:h-4 md:w-4" />
                 </button>
