@@ -13,32 +13,7 @@ const ChatLanding: React.FC<ChatLandingProps> = ({
   submitQuery,
   hasReachedLimit = false,
 }) => {
-  const suggestedQuestions = [
-    {
-      icon: <MessageSquare className="h-4 w-4" />,
-      text: "who are you?",
-    },
-    {
-      icon: <Code className="h-4 w-4" />,
-      text: "what projects have you built?",
-    },
-    {
-      icon: <Brain className="h-4 w-4" />,
-      text: "what are your tech skills?",
-    },
-    {
-      icon: <Lightbulb className="h-4 w-4" />,
-      text: "what's your approach to problem solving?",
-    },
-    {
-      icon: <BookOpen className="h-4 w-4" />,
-      text: "tell me about your experience",
-    },
-    {
-      icon: <Mail className="h-4 w-4" />,
-      text: "how can i contact you?",
-    },
-  ];
+ 
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -81,28 +56,7 @@ const ChatLanding: React.FC<ChatLandingProps> = ({
         className="w-full max-w-md space-y-2 md:space-y-3"
         variants={containerVariants}
       >
-        {suggestedQuestions.map((question, index) => (
-          <motion.button
-            key={index}
-            className={`flex w-full items-center rounded-lg px-2 md:px-4 py-3 md:py-3 transition-colors ${
-              hasReachedLimit
-                ? "bg-gray-100 cursor-not-allowed opacity-50"
-                : "bg-accent hover:bg-accent/80"
-            }`}
-            onClick={() => !hasReachedLimit && submitQuery(question.text)}
-            variants={itemVariants}
-            whileHover={!hasReachedLimit ? { scale: 1.02 } : {}}
-            whileTap={!hasReachedLimit ? { scale: 0.98 } : {}}
-            disabled={hasReachedLimit}
-          >
-            <span className="bg-background mr-2 md:mr-3 rounded-full p-2 md:p-2">
-              {question.icon}
-            </span>
-            <span className="text-left text-sm md:text-base leading-relaxed lowercase">
-              {question.text}
-            </span>
-          </motion.button>
-        ))}
+        
       </motion.div>
     </motion.div>
   );

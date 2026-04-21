@@ -355,92 +355,40 @@ const Chat = () => {
     }
   }, []);
 
-  const scrollToBottom = useCallback((force: boolean = false) => {
-    const container = scrollContainerRef.current;
-    if (!container) {
-      console.log("[SCROLL] Container not found, using fallback");
-      // Fallback to messagesEndRef
-      if (messagesEndRef.current) {
-        messagesEndRef.current.scrollIntoView({
-          behavior: "smooth",
-          block: "end",
-        });
-      }
-      return;
-    }
+// Simplified scrollToBottom — remove the old one entirely
+const scrollToBottom = useCallback((force = false) => {
+  const container = scrollContainerRef.current;
+  if (!container) return;
 
-    console.log("[SCROLL] Attempting to scroll", {
-      force,
-      isUserScrolling: isUserScrolling.current,
-    });
+  const { scrollTop, scrollHeight, clientHeight } = container;
+  const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
+  const userIsAway = distanceFromBottom > 150;
 
-    // Always scroll when forced (focus, new messages, etc.)
-    if (force) {
-      console.log("[SCROLL] Force scrolling to bottom");
-      // Use immediate scroll for force mode to prevent partial scroll states
-      container.scrollTop = container.scrollHeight;
-      return;
-    }
+  // If user has scrolled up intentionally, don't interrupt them
+  if (!force && userIsAway && isUserScrolling.current) return;
 
-    // Prevent excessive scrolling
-    const now = Date.now();
-    if (now - lastScrollTime.current < 50) {
-      // Reduced throttling for smoother updates
-      console.log("[SCROLL] Throttled - too recent");
-      return;
-    }
-    lastScrollTime.current = now;
-
-    // Check if user is near bottom
-    const { scrollTop, scrollHeight, clientHeight } = container;
-    const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
-    const isNearBottom = distanceFromBottom < 100; // Reduced threshold for more responsive scrolling
-
-    console.log("[SCROLL] Scroll state:", {
-      scrollTop,
-      scrollHeight,
-      clientHeight,
-      distanceFromBottom,
-      isNearBottom,
-      isUserScrolling: isUserScrolling.current,
-    });
-
-    // Auto-scroll if near bottom or not manually scrolling
-    if (isNearBottom || !isUserScrolling.current) {
-      console.log("[SCROLL] Scrolling to bottom");
-      container.scrollTo({
-        top: scrollHeight,
-        behavior: "smooth",
-      });
-    } else {
-      console.log(
-        "[SCROLL] Skipping scroll - user not near bottom or is scrolling",
-      );
-    }
-  }, []);
+  container.scrollTo({ top: scrollHeight, behavior: force ? "instant" : "smooth" });
+}, []);
 
   // Handle user scroll detection
-  const handleScroll = useCallback(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
+// Simpler scroll detection — reduce the timeout to 500ms
+const handleScroll = useCallback(() => {
+  const container = scrollContainerRef.current;
+  if (!container) return;
 
-    isUserScrolling.current = true;
+  const { scrollTop, scrollHeight, clientHeight } = container;
+  const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
+  const nearBottom = distanceFromBottom < 150;
 
-    // Check if user is near bottom
-    const { scrollTop, scrollHeight, clientHeight } = container;
-    const distanceFromBottom = scrollHeight - scrollTop - clientHeight;
-    const nearBottom = distanceFromBottom < 100; // Reduced threshold to match scrollToBottom
-    isNearBottom.current = nearBottom;
-    setShowScrollButton(!nearBottom && scrollTop > 200);
+  isNearBottom.current = nearBottom;
+  isUserScrolling.current = true;
+  setShowScrollButton(!nearBottom && scrollTop > 200);
 
-    if (scrollTimeoutRef.current) {
-      clearTimeout(scrollTimeoutRef.current);
-    }
-
-    scrollTimeoutRef.current = setTimeout(() => {
-      isUserScrolling.current = false;
-    }, 1000); // Reduced timeout for more responsive auto-scrolling
-  }, []);
+  if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+  scrollTimeoutRef.current = setTimeout(() => {
+    isUserScrolling.current = false;
+  }, 500); // was 1000ms — too long during streaming
+}, []);
 
   useEffect(() => {
     const container = scrollContainerRef.current;
@@ -556,90 +504,53 @@ const Chat = () => {
     [],
   );
 
-  const processBuffer = useCallback(
-    (buffer: string, assistantMessageId: string): string => {
-      const lines = buffer.split("\n");
-      let remainingBuffer = "";
+// Fix processBuffer — remove chunkCount from deps, use a local counter instead
+const processBuffer = useCallback(
+  (buffer: string, assistantMessageId: string): string => {
+    const lines = buffer.split("\n");
+    let remainingBuffer = "";
+    let chunksProcessed = 0;
 
-      for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim();
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line.startsWith("data: ")) {
+        const data = line.slice(6).trim();
+        if (data === "[DONE]") return remainingBuffer;
 
-        if (line.startsWith("data: ")) {
-          const data = line.slice(6).trim();
+        try {
+          const parsed = JSON.parse(data);
+          if (parsed.error) throw new Error(parsed.error);
 
-          if (data === "[DONE]") {
-            return remainingBuffer;
+          const textChunk =
+            parsed.responseType && parsed.text !== undefined
+              ? parsed.text + (parsed.isComplete ? "" : "\n")
+              : parsed.text?.trim()
+              ? parsed.text
+              : null;
+
+          if (textChunk !== null) {
+            assistantContentRef.current += textChunk;
+            chunksProcessed++;
+            dispatch({
+              type: "UPDATE_ASSISTANT_MESSAGE",
+              payload: { id: assistantMessageId, content: assistantContentRef.current },
+            });
+
+            // Scroll every other chunk, no setTimeout needed
+            if (chunksProcessed % 2 === 0) scrollToBottom();
           }
-
-          try {
-            const parsed = JSON.parse(data);
-
-            if (parsed.error) {
-              throw new Error(parsed.error);
-            }
-
-            // Handle structured responses (skills, resume, projects, etc.)
-            if (
-              parsed.responseType &&
-              typeof parsed.chunk === "number" &&
-              parsed.text !== undefined
-            ) {
-              assistantContentRef.current +=
-                parsed.text + (parsed.isComplete ? "" : "\n");
-              dispatch({ type: "INCREMENT_CHUNK_COUNT" });
-
-              dispatch({
-                type: "UPDATE_ASSISTANT_MESSAGE",
-                payload: {
-                  id: assistantMessageId,
-                  content: assistantContentRef.current,
-                },
-              });
-
-              if (parsed.isComplete) {
-                console.log(
-                  `[CHAT-UI] Completed structured response: ${parsed.responseType}`,
-                );
-              }
-            }
-            // Handle regular streaming responses
-            else if (parsed.text && parsed.text.trim()) {
-              assistantContentRef.current += parsed.text;
-              dispatch({ type: "INCREMENT_CHUNK_COUNT" });
-
-              dispatch({
-                type: "UPDATE_ASSISTANT_MESSAGE",
-                payload: {
-                  id: assistantMessageId,
-                  content: assistantContentRef.current,
-                },
-              });
-            }
-
-            if (chunkCount === 0) {
-            }
-
-            // More frequent scroll during streaming for better UX
-            if (chunkCount % 2 === 0) {
-              // Scroll every 2nd chunk instead of 3rd
-              setTimeout(() => scrollToBottom(), 50); // Reduced delay
-            }
-          } catch (parseError) {
-            console.warn(
-              "[CHAT-UI] Failed to parse streaming data:",
-              data,
-              parseError,
-            );
-          }
-        } else if (i === lines.length - 1 && line) {
-          remainingBuffer = line;
+        } catch (parseError) {
+          console.warn("[CHAT-UI] Failed to parse streaming data:", data, parseError);
         }
+      } else if (i === lines.length - 1 && line) {
+        remainingBuffer = line;
       }
+    }
 
-      return remainingBuffer;
-    },
-    [chunkCount],
-  );
+    return remainingBuffer;
+  },
+  [scrollToBottom], // only real dep now
+);
 
   const submitQuery = useCallback(
     async (query: string) => {
@@ -896,7 +807,7 @@ const Chat = () => {
         <div className="flex-1 overflow-hidden min-h-0 flex flex-col relative will-change-scroll">
           <div
             ref={scrollContainerRef}
-            className="h-full overflow-y-auto px-4 pt-3 md:pt-4 pb-16 md:pb-24 scroll-smooth"
+className="h-full overflow-y-auto px-4 pt-6 md:pt-8 pb-40 md:pb-32 overscroll-contain"
             style={{
               WebkitOverflowScrolling: "touch",
               scrollbarWidth: "thin",

@@ -70,7 +70,7 @@ export default function RootLayout({
       </head>
       <body
         className={cn(
-          "bg-gradient-to-br from-primary/5 via-background to-accent/5 min-h-screen font-sans antialiased"
+          "bg-gradient-to-br from-primary/5 via-background to-accent/5 font-sans antialiased"
         )}
       >
         <ThemeProvider

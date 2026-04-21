@@ -86,7 +86,7 @@ export default function Home() {
   };
 
   return (
-    <div className="relative min-h-[90vh] lg:min-h-screen flex flex-col">
+    <div className="relative min-h-[91vh] lg:min-h-screen flex flex-col">
       <Header />
 
       {/* <motion.div
@@ -135,7 +135,7 @@ export default function Home() {
                 transition={{ delay: 0.3 }}
                 className="text-5xl sm:text-6xl md:text-6xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold tracking-tight text-balance leading-tight sm:leading-tight md:leading-tight lowercase"
               >
-                yo, it&apos;s{" "}
+                yoo, it&apos;s{" "}
                 <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                   penguin
                 </span>
@@ -195,7 +195,7 @@ export default function Home() {
         </section>
 
         <section
-          className="relative px-4 pb-6 sm:pb-8 md:pb-12 lg:pb-16 xl:pb-20 
+          className="relative px-4 pb-6 sm:pb-4 md:pb-6 lg:pb-8 xl:pb-10 
                            flex flex-col justify-end
                            h-auto sm:h-auto md:min-h-[25vh] lg:min-h-[30vh] xl:min-h-[25vh]
                            sm:mt-8 md:mt-12 lg:mt-0"
@@ -249,7 +249,6 @@ export default function Home() {
         </section>
       </div>
 
-      <Footer variant="bottom" />
       <FluidCursor />
     </div>
   );

@@ -67,9 +67,9 @@ export default function Header() {
                 href="https://github.com/sirajahmedx/portfolio"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 px-2 py-1 rounded text-muted-foreground hover:text-foreground transition-colors lowercase"
+                className="flex items-center gap-1 px-2 py-1 rounded text-muted-foreground hover:text-foreground transition-colors"
                 aria-label="View portfolio repository on GitHub"
-                title={`stars on portfolio repo: ${stars !== null ? stars.toLocaleString() : "..."}`}
+                title={`Stars on portfolio repo: ${stars !== null ? stars.toLocaleString() : "..."}`}
               >
                 <Github className="h-5 w-5" />
                 <span className="font-mono text-sm min-w-[32px] text-center">

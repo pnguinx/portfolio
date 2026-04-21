@@ -5,7 +5,7 @@ import Chat from "@/components/chat/chat";
 
 export default function Page() {
   return (
-    <div className="min-h-screen w-full flex flex-col overflow-hidden">
+    <div className="w-full flex flex-col overflow-hidden">
       <Suspense
         fallback={
           <div className="flex-1 flex items-center justify-center">
